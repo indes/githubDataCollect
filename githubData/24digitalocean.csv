@@ -1,0 +1,40 @@
+digitalocean,community,https://www.digitalocean.com/community/tutorials,
+digitalocean,community,https://www.digitalocean.com/community/tags,
+digitalocean,community,https://www.digitalocean.com/community/questions,
+digitalocean,community,https://www.digitalocean.com/community/projects,
+digitalocean,community,https://www.meetup.com/pro/digitalocean/,
+digitalocean,configuration-management,https://the.binbashtheory.com/using-ansible-with-digitalocean/,
+digitalocean,configuration-management,http://docs.ansible.com/ansible/list_of_cloud_modules.html#digital-ocean,
+digitalocean,configuration-management,https://www.terraform.io/docs/providers/do/,
+digitalocean,configuration-management,https://github.com/keinohguchi/do-in-action, - Example repo for using DigitalOcean with Terraform and Ansible.
+digitalocean,developer-documentation,https://developers.digitalocean.com/documentation/v2/,
+digitalocean,developer-documentation,https://developers.digitalocean.com/documentation/spaces/,
+digitalocean,developer-documentation,https://developers.digitalocean.com/documentation/oauth/,
+digitalocean,developer-documentation,https://developers.digitalocean.com/documentation/metadata/,
+digitalocean,developer-documentation,https://www.digitalocean.com/docs/release-notes/, - Notes tracking incremental improvements and major releases for the DigitalOcean cloud platform.
+digitalocean,open-source-projects,https://developers.digitalocean.com/opensource/,
+digitalocean,open-source-projects,https://github.com/digitalocean/netbox,
+digitalocean,open-source-projects,https://github.com/digitalocean/doctl, - Official command-line interface for the DigitalOcean API.
+digitalocean,open-source-projects,https://github.com/digitalocean/go-libvirt,
+digitalocean,open-source-projects,https://github.com/digitalocean/go-qemu,
+digitalocean,community-oss-projects,https://github.com/f/do-sshuttle, - Transparent Proxying via sshuttle to DigitalOcean Droplet.
+digitalocean,community-oss-projects,https://github.com/qmx/drophosts, - Update 
+digitalocean,community-oss-projects,https://github.com/tam7t/droplan, - Manage iptable rules for the private interface on DigitalOcean droplets.
+digitalocean,community-oss-projects,https://github.com/theforeman/foreman-digitalocean, - Plugin to enable management of DigitalOcean droplets in Foreman.
+digitalocean,community-oss-projects,https://github.com/jimmycuadra/lita-digitalocean, - Lita handler for managing DigitalOcean services.
+digitalocean,community-oss-projects,https://github.com/progrium/hostpool, - Worker pool manager for DigitalOcean hosts.
+digitalocean,community-oss-projects,https://github.com/skibish/ddns, - Personal DDNS client with DigitalOcean Networking DNS as backend.
+digitalocean,community-oss-projects,https://github.com/addpipe/Less-Confusing-Digital-Ocean-Menus, - A Chrome extension that makes account menus less confusing.
+digitalocean,community-oss-projects,https://github.com/NicholasPCole/dodc, - A dialog-based shell script to quickly create a single DigitalOcean Droplet.
+digitalocean,community-oss-projects,https://github.com/bjornjohansen/do-upgrade-plans, - A script to upgrade your DigitalOcean Droplets to better plans with the same cost.
+digitalocean,clients,https://github.com/digitalocean/doctl, - Command-line tool for DigitalOcean services.
+digitalocean,clients,https://github.com/andrewsomething/digitalocean-indicator, - Debian Gnome panel client.
+digitalocean,clients,https://github.com/itohnobue/domanager, - Linux and Windows System Tray Client.
+digitalocean,clients,https://github.com/terhechte/OceanBar, - macOS menu bar client.
+digitalocean,clients,https://github.com/pearkes/tugboat," - Ruby command-line tool for DigitalOcean services, focusing on a more guided UX."
+digitalocean,video-tutorials,https://www.youtube.com/watch?v=XpxgSZ3dspE,
+digitalocean,other,https://www.reddit.com/r/digital_ocean/,
+digitalocean,other,https://webchat.freenode.net/,
+digitalocean,other,https://github.com/digitalocean/engineering-code-of-conduct,
+digitalocean,other,https://github.com/digitalocean/do_user_scripts, - User data scripts to help provision apps on a Droplet.
+digitalocean,other,https://hacktoberfest.digitalocean.com/, - Month-long celebration of open source software in partnership with GitHub.
