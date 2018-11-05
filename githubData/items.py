@@ -15,6 +15,8 @@ class GithubdataItem(scrapy.Item):
     pass
 
 # 大类别 小类别 项目名字 项目链接 项目描述
+
+
 class crawlItem(scrapy.Item):
     cate = scrapy.Field()
     subcate = scrapy.Field()
@@ -22,3 +24,14 @@ class crawlItem(scrapy.Item):
     link = scrapy.Field()
     desc = scrapy.Field()
     pass
+
+
+class project_category_item(scrapy.Item):
+    name = scrapy.Field()
+    link = scrapy.Field()
+
+    def item2dic(self):
+        return {
+            "name": self["name"],
+            "link": self["link"]
+        }

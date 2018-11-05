@@ -2,17 +2,24 @@
 import scrapy
 import csv
 from githubData.items import crawlItem
-
+from scrapy import Request
 
 class GithubSerendipitySpider(scrapy.Spider):
     name = 'github_serendipity'
-    allowed_domains = ['scrapy-chs.readthedocs.io']
+    # allowed_domains = ['scrapy-chs.readthedocs.io']
     start_urls = ['https://github-serendipity.github.io/repo/frenck___awesome-home-assistant']
 
     # father title is here but now ignore , use map to store
 
+
+    # def start_requests(self):
+
+    #     url = 'https://github-serendipity.github.io/repo/frenck___awesome-home-assistant'
+    #     yield Request(url, headers=self.headers)
+
     def parse(self, response):
         # 得到所有h3,或者2
+        print(response.body)
         cate = response.xpath('//h2/@id')
         with open('27home-assistant.csv', mode='a') as employee_file:
             employee_writer = csv.writer(employee_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -32,7 +39,7 @@ class GithubSerendipitySpider(scrapy.Spider):
                     # print(subli_link)
                     # print(subli_test)
                     data = []
-                    if len(subli_link)>0:
+                    if len(subli_link) > 0:
                         data.append("home-assistant")
                         data.append(str(subcate))
                         data.append(str(subli_link[0]))
@@ -43,9 +50,9 @@ class GithubSerendipitySpider(scrapy.Spider):
                         employee_writer.writerow(data)
                         # print("----" + str(len(subli_single)) + "-----------------")
 
-         # yield scrapy.Request(url, callback=self.parse_article)
+        # yield scrapy.Request(url, callback=self.parse_article)
 
-    def parse_article(self, response):#后续工作，直接在爬取时对项目的代码readme进行分析
+    def parse_article(self, response):  # 后续工作，直接在爬取时对项目的代码readme进行分析
         detail = response.xpath('//div[@class="article-wrap"]')
         item = crawlItem()
         item['title'] = detail.xpath('h1/text()')[0].extract()

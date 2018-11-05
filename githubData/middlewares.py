@@ -10,6 +10,31 @@ from selenium import webdriver
 from scrapy.http import HtmlResponse
 import time
 from selenium.webdriver.chrome.options import Options
+from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
+import random
+
+USER_AGENT_LIST = [
+    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
+    "Mozilla/5.0 (X11; CrOS i686 2268.111.0) AppleWebKit/536.11 (KHTML, like Gecko) Chrome/20.0.1132.57 Safari/536.11",
+    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1092.0 Safari/536.6",
+    "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.6 (KHTML, like Gecko) Chrome/20.0.1090.0 Safari/536.6",
+    "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/19.77.34.5 Safari/537.1",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.9 Safari/536.5",
+    "Mozilla/5.0 (Windows NT 6.0) AppleWebKit/536.5 (KHTML, like Gecko) Chrome/19.0.1084.36 Safari/536.5",
+    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3",
+    "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_0) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1063.0 Safari/536.3",
+    "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3",
+    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1062.0 Safari/536.3",
+    "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3",
+    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3",
+    "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.1 Safari/536.3",
+    "Mozilla/5.0 (Windows NT 6.2) AppleWebKit/536.3 (KHTML, like Gecko) Chrome/19.0.1061.0 Safari/536.3",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24",
+    "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24",
+    "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/43.0.2357.132 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:41.0) Gecko/20100101 Firefox/41.0"
+]
 
 
 class GithubdataSpiderMiddleware(object):
@@ -106,31 +131,45 @@ class GithubdataDownloaderMiddleware(object):
     def spider_opened(self, spider):
         spider.logger.info('Spider opened: %s' % spider.name)
 
+
 class ChromeMiddleware(object):
-        def __init__(self):
-            option = Options()
-            #option.add_argument('--headless')
-            self.driver = webdriver.Chrome(executable_path="/usr/local/bin/chromedriver",
-                                           chrome_options=option)
+    def __init__(self):
+        option = Options()
+        # option.add_argument('--headless')
 
-        def process_request(self, request, spider):
-            self.driver.get(request.url)
-            print("页面开始渲染。。。")
-            self.driver.execute_script("scroll(0, 1000);")
-            time.sleep(1)
-            rendered_body = self.driver.page_source
-            print("页面完成渲染。。。")
-            return HtmlResponse(request.url, body=rendered_body, encoding="utf-8")
+        option.add_argument('--headless')
+        option.add_argument('--no-sandbox')
+        option.add_argument('--disable-dev-shm-usage')
+        self.driver = webdriver.Chrome(executable_path=r"/home/li/bin/chromedriver",
+                                       chrome_options=option)
 
-        def spider_closed(self, spider, reason):
-            print('驱动关闭')
-            self.driver.close()
+        # self.driver = webdriver.Chrome(executable_path=r"‪C:\Portable\bin\chromedriver.exe",
+        #                                chrome_options=option)
+
+    def process_request(self, request, spider):
+        self.driver.get(request.url)
+        print("页面开始渲染。。。")
+        self.driver.execute_script("scroll(0, 1000);")
+        time.sleep(1)
+        rendered_body = self.driver.page_source
+        print("页面完成渲染。。。")
+        return HtmlResponse(request.url, body=rendered_body, encoding="utf-8")
+
+    def spider_closed(self, spider, reason):
+        print('驱动关闭')
+        self.driver.close()
 
 
 class ProxyMiddleware(object):
     def process_request(self, request, spider):
 
         if request.url.startswith("http://"):
-            request.meta['proxy'] = "http://180.96.27.12:88"  # http代理
+            request.meta['proxy'] = "http://113.128.148.31:8118"  # http代理
         elif request.url.startswith("https://"):
-            request.meta['proxy'] = "http://109.108.87.136:53281"  # https代理
+            request.meta['proxy'] = "http://113.128.148.31:8118"  # https代理
+
+
+class RandomUserAgent(UserAgentMiddleware):
+    def process_request(self, request, spider):
+        ua = random.choice(USER_AGENT_LIST)
+        request.headers.setdefault('User-Agent', ua)
