@@ -8,7 +8,7 @@ import pprint
 import json
 
 
-class GithubSerendipitySpider(scrapy.Spider):
+class github_awesome_spider(scrapy.Spider):
     name = 'github_awesome'
 
     start_urls = [

@@ -35,3 +35,18 @@ class project_category_item(scrapy.Item):
             "name": self["name"],
             "link": self["link"]
         }
+
+
+class repository_list_item(scrapy.Item):
+    name = scrapy.Field()
+    describe = scrapy.Field()
+    link = scrapy.Field()
+    category = scrapy.Field()
+
+    def item2dic(self):
+        return {
+            "name": self["name"],
+            "category": self["category"],
+            "describe": self["describe"],
+            "link": self["link"]
+        }
