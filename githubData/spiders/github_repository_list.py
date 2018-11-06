@@ -15,8 +15,9 @@ class github_repository_list_spider(scrapy.Spider):
 
     def start_requests(self):
         client = pymongo.MongoClient(
-            host="192.168.0.165", port=27017)
-
+            host="127.0.0.1", port=29197)
+            
+        client["github"].authenticate("github", "git332", "github")
         db = client["github"]
         coll = db.category
         # query = {"name": {"$regex": "^Databases"}}

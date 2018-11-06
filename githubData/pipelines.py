@@ -16,8 +16,8 @@ class GithubdataPipeline(object):
 class github_awesome_pipeline(object):
     def __init__(self):
         self.client = pymongo.MongoClient(
-            host="192.168.0.165", port=27017)
-
+            host="127.0.0.1", port=29197)
+        self.client["github"].authenticate("github", "git332", "github")
         self.db = self.client["github"]
 
     def process_item(self, item, spider):

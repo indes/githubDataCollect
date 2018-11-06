@@ -140,7 +140,7 @@ class ChromeMiddleware(object):
         option.add_argument('--headless')
         option.add_argument('--no-sandbox')
         option.add_argument('--disable-dev-shm-usage')
-        self.driver = webdriver.Chrome(executable_path=r"/home/li/bin/chromedriver",
+        self.driver = webdriver.Chrome(executable_path=r"/usr/bin/chromedriver",
                                        chrome_options=option)
 
         # self.driver = webdriver.Chrome(executable_path=r"‪C:\Portable\bin\chromedriver.exe",
