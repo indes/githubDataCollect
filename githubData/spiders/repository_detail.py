@@ -63,4 +63,11 @@ class repository_detail_spider(scrapy.Spider):
         # pprint.pprint(response.xpath("//pre/text()").extract()[0])
 
         readme = response.xpath("//pre/text()").extract()[0]
-        
+
+        item = repository_detail_item()
+        item["tags"] = response.meta["tags"]
+        item["readme"] = readme
+        item["project"] = "{}/{}".format(response.meta["user"],
+                                         response.meta["project"])
+
+        yield item

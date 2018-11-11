@@ -52,4 +52,12 @@ class repository_list_item(scrapy.Item):
         }
 
 class repository_detail_item(scrapy.Item):
-    json_str = scrapy.Field()
+    readme = scrapy.Field()
+    tags = scrapy.Field()
+    project = scrapy.Field()
+    def item2dic(self):
+        return {
+            "readme": self["readme"],
+            "tags": self["tags"],
+            "project": self["project"]
+        }
