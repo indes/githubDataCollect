@@ -3,7 +3,7 @@
 #
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-from .items import project_category_item, repository_list_item
+from .items import project_category_item, repository_list_item, repository_detail_item
 import pymongo
 import json
 
@@ -34,3 +34,7 @@ class github_awesome_pipeline(object):
             coll = self.db.repository_list
             id = coll.insert_one(item.item2dic()).inserted_id
             print(id)
+
+        if isinstance(item, repository_detail_item):
+            print(item["json_str"])
+            

@@ -50,3 +50,6 @@ class repository_list_item(scrapy.Item):
             "describe": self["describe"],
             "link": self["link"]
         }
+
+class repository_detail_item(scrapy.Item):
+    json_str = scrapy.Field()
