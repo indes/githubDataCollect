@@ -25,7 +25,9 @@ class repository_detail_spider(scrapy.Spider):
         coll = db.repository_list
         query = {"link": {"$regex": "^https://github.com/"}}
         docs = coll.find(query)
+        yield Request("https://github.com/golang/go", meta={'link_raw': "https://github.com/golang/go", 'user': "golang", 'project': "go"}, callback=self.parse)
         for doc in docs:
+            continue
             a = a + 1
 
             print(doc['link'])
@@ -33,8 +35,9 @@ class repository_detail_spider(scrapy.Spider):
             print('user: {}'.format(user))
             if(len(doc['link'].split('/')) > 4):
                 project = doc['link'].split('/')[4].split('#')[0]
-                request_link = "https://api.github.com/repos/{}/{}".format(
+                request_link = "https://github.com/{}/{}".format(
                     user, project)
+
                 yield Request(request_link, meta={'link_raw': doc["link"], 'user': user, 'project': project}, callback=self.parse)
             else:
                 continue
@@ -44,9 +47,20 @@ class repository_detail_spider(scrapy.Spider):
         # print("a: {}".format(a))
 
     def parse(self, response):
-        detail_json = response.xpath("//pre/text()").extract()[0]
-        repository_detail = repository_detail_item()
-        repository_detail["json_str"] = detail_json
-        # print(repository_detail)
-        yield repository_detail
+        tags = []
+        tags_raw = response.xpath(
+            "//*[contains(@class,'list-topics-container')]/a/text()").extract()
+        if(tags_raw):
+            for tag_raw in tags_raw:
+                tags.append(tag_raw.split(" ")[8].split("\n")[0])
+
+        print("tags: {}".format(tags))
+        readme_link = "https://raw.githubusercontent.com/{}/{}/master/README.md".format(
+            response.meta["user"], response.meta["project"])
+        yield Request(readme_link, meta={"link_raw": response.meta["link_raw"], "user": response.meta["user"], "project": response.meta["project"], "tags": tags}, callback=self.readme_parse)
+
+    def readme_parse(self, response):
+        # pprint.pprint(response.xpath("//pre/text()").extract()[0])
+
+        readme = response.xpath("//pre/text()").extract()[0]
         
