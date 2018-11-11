@@ -25,9 +25,9 @@ class repository_detail_spider(scrapy.Spider):
         coll = db.repository_list
         query = {"link": {"$regex": "^https://github.com/"}}
         docs = coll.find(query)
-        yield Request("https://github.com/golang/go", meta={'link_raw': "https://github.com/golang/go", 'user': "golang", 'project': "go"}, callback=self.parse)
+        # yield Request("https://github.com/golang/go", meta={'link_raw': "https://github.com/golang/go", 'user': "golang", 'project': "go"}, callback=self.parse)
         for doc in docs:
-            continue
+            # continue
             a = a + 1
 
             print(doc['link'])
