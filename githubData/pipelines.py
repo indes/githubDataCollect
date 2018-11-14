@@ -7,6 +7,8 @@ from .items import project_category_item, repository_list_item, repository_detai
 import pymongo
 import json
 import pprint
+import logging
+
 
 class GithubdataPipeline(object):
     def process_item(self, item, spider):
@@ -38,6 +40,4 @@ class github_awesome_pipeline(object):
         if isinstance(item, repository_detail_item):
             coll = self.db.detail
             id = coll.insert_one(item.item2dic()).inserted_id
-            pprint.pprint(item.item2dic())
-            print(id)
-            
+            logging.info("insert {}".format(id))

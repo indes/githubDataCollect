@@ -6,6 +6,8 @@
 # https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
 from scrapy import signals
+import logging
+import requests
 from selenium import webdriver
 from scrapy.http import HtmlResponse
 import time
@@ -148,15 +150,16 @@ class ChromeMiddleware(object):
 
     def process_request(self, request, spider):
         self.driver.get(request.url)
-        print("页面开始渲染。。。")
+        logging.info("页面开始渲染 url: {}".format(request.url))
         self.driver.execute_script("scroll(0, 1000);")
         time.sleep(1)
         rendered_body = self.driver.page_source
-        print("页面完成渲染。。。")
+        logging.info("页面完成渲染")
         return HtmlResponse(request.url, body=rendered_body, encoding="utf-8")
 
     def spider_closed(self, spider, reason):
-        print('驱动关闭')
+        logging.info('驱动关闭')
+        requests.get("https://one.thecase.ml/api/send?msg=爬虫结束")
         self.driver.close()
 
 

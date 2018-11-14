@@ -14,6 +14,8 @@ BOT_NAME = 'githubData'
 SPIDER_MODULES = ['githubData.spiders']
 NEWSPIDER_MODULE = 'githubData.spiders'
 
+LOG_FILE = "log.log"
+
 USER_AGENT = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36'
 ROBOTSTXT_OBEY = False
 DOWNLOADER_MIDDLEWARES = {

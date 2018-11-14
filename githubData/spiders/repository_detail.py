@@ -2,7 +2,8 @@
 import scrapy
 from scrapy.loader import ItemLoader
 from githubData.items import repository_detail_item
-from scrapy import Request, log
+from scrapy import Request
+import logging
 from scrapy.selector import Selector
 import pprint
 import pymongo
@@ -29,16 +30,17 @@ class repository_detail_spider(scrapy.Spider):
         for doc in docs:
             # continue
             a = a + 1
-
-            print(doc['link'])
+            print("[{}] {}".format(a, doc['link']))
             user = doc['link'].split('/')[3]
-            print('user: {}'.format(user))
             if(len(doc['link'].split('/')) > 4):
                 project = doc['link'].split('/')[4].split('#')[0]
                 request_link = "https://github.com/{}/{}".format(
                     user, project)
-
-                yield Request(request_link, meta={'link_raw': doc["link"], 'user': user, 'project': project}, callback=self.parse)
+                logging.info("crawl {}".format(request_link))
+                yield Request(
+                    request_link, 
+                    meta={'link_raw': doc["link"], 'user': user, 'project': project}, 
+                    callback=self.parse)
             else:
                 continue
 
@@ -47,6 +49,7 @@ class repository_detail_spider(scrapy.Spider):
         # print("a: {}".format(a))
 
     def parse(self, response):
+        logging.info("parsing {}".format(response.url))
         tags = []
         tags_raw = response.xpath(
             "//*[contains(@class,'list-topics-container')]/a/text()").extract()
@@ -54,15 +57,41 @@ class repository_detail_spider(scrapy.Spider):
             for tag_raw in tags_raw:
                 tags.append(tag_raw.split(" ")[8].split("\n")[0])
 
-        print("tags: {}".format(tags))
+        logging.info(
+            "project: {}/{}, tags: {}".format(response.meta["user"], response.meta["project"], tags))
         readme_link = "https://raw.githubusercontent.com/{}/{}/master/README.md".format(
             response.meta["user"], response.meta["project"])
-        yield Request(readme_link, meta={"link_raw": response.meta["link_raw"], "user": response.meta["user"], "project": response.meta["project"], "tags": tags}, callback=self.readme_parse)
+        yield Request(readme_link, meta={"link_raw": response.meta["link_raw"], "user": response.meta["user"], "project": response.meta["project"], "tags": tags, "page": "README.md"}, callback=self.readme_parse)
 
     def readme_parse(self, response):
         # pprint.pprint(response.xpath("//pre/text()").extract()[0])
+        logging.info("parsing {}".format(response.url))
 
-        readme = response.xpath("//pre/text()").extract()[0]
+        if(response.meta["page"] == "README.md"):
+            try:
+                readme = response.xpath("//pre/text()").extract()[0]
+            except:
+                readme_link = "https://raw.githubusercontent.com/{}/{}/master/readme.md".format(
+                    response.meta["user"], response.meta["project"])
+                yield Request(
+                    readme_link,
+                    meta={
+                        "link_raw": response.meta["link_raw"],
+                        "user": response.meta["user"],
+                        "project": response.meta["project"],
+                        "tags": response.meta["tags"],
+                        "page": "readme.md"
+                    },
+                    callback=self.readme_parse
+                )
+
+        elif(response.meta["page"] == "readme.md"):
+            try:
+                readme = response.xpath("//pre/text()").extract()[0]
+            except:
+                readme = ""
+        
+        
 
         item = repository_detail_item()
         item["tags"] = response.meta["tags"]
