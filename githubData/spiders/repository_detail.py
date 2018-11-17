@@ -90,8 +90,6 @@ class repository_detail_spider(scrapy.Spider):
                 readme = response.xpath("//pre/text()").extract()[0]
             except:
                 readme = ""
-        
-        
 
         item = repository_detail_item()
         item["tags"] = response.meta["tags"]
