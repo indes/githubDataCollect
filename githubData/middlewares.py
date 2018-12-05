@@ -12,7 +12,21 @@ from scrapy.http import HtmlResponse
 import time
 from selenium.webdriver.chrome.options import Options
 from scrapy.downloadermiddlewares.useragent import UserAgentMiddleware
+from fake_useragent import UserAgent
 import random
+
+ua = UserAgent()
+
+
+class RandomUserAgentMiddleware(object):
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+
+    def process_request(self, request, spider):
+        user_agent = ua.random
+
+        self.logger.debug('User-Agent: {}'.format(user_agent))
+        request.headers['User-Agent'] = user_agent
 
 
 class GithubdataSpiderMiddleware(object):
@@ -125,11 +139,10 @@ class ChromeMiddleware(object):
 
     def process_request(self, request, spider):
         self.driver.get(request.url)
-        logging.info("页面开始渲染 url: {}".format(request.url))
+        logging.info("渲染 {}".format(request.url))
         self.driver.execute_script("scroll(0, 1000);")
         time.sleep(1)
         rendered_body = self.driver.page_source
-        logging.info("页面完成渲染")
         return HtmlResponse(request.url, body=rendered_body, encoding="utf-8")
 
     def spider_closed(self, spider, reason):

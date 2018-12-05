@@ -21,9 +21,8 @@ ROBOTSTXT_OBEY = False
 DOWNLOADER_MIDDLEWARES = {
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,  # 关闭默认下载器
     'githubData.middlewares.ChromeMiddleware': 543,
-    # 'githubData.middlewares.RandomUserAgent': 599,
-    
-    'githubData.middlewares.ProxyMiddleware': 600
+    'githubData.middlewares.RandomUserAgentMiddleware': 99,
+    # 'githubData.middlewares.ProxyMiddleware': 600
 }
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -75,8 +74,8 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-#    'githubData.pipelines.GithubdataPipeline': 300,
-   'githubData.pipelines.github_awesome_pipeline': 299,
+    #    'githubData.pipelines.GithubdataPipeline': 300,
+    'githubData.pipelines.github_awesome_pipeline': 299,
 
 }
 
