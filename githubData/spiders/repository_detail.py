@@ -111,7 +111,11 @@ class repository_detail_spider(scrapy.Spider):
                         "user": response.meta["user"],
                         "project": response.meta["project"],
                         "tags": response.meta["tags"],
-                        "page": "readme.md"
+                        "page": "readme.md",
+                        "watch_num": response.meta["watch_num"],
+                        "star_num": response.meta["star_num"],
+                        "fork_num": response.meta["fork_num"],
+                        "lang_list": response.meta["lang_list"]
                     },
                     callback=self.readme_parse
                 )
@@ -124,9 +128,9 @@ class repository_detail_spider(scrapy.Spider):
 
         item = repository_detail_item()
         item["tags"] = response.meta["tags"]
-        item["watch_num"] = response.meta["watch_num"],
-        item["star_num"] = response.meta["star_num"],
-        item["fork_num"] = response.meta["fork_num"],
+        item["watch_num"] = response.meta["watch_num"]
+        item["star_num"] = response.meta["star_num"]
+        item["fork_num"] = response.meta["fork_num"]
         item["lang_list"] = response.meta["lang_list"]
         item["readme"] = readme
         item["project"] = "{}/{}".format(response.meta["user"],

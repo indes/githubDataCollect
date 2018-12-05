@@ -57,9 +57,9 @@ class repository_detail_item(scrapy.Item):
     readme = scrapy.Field()
     tags = scrapy.Field()
     project = scrapy.Field()
-    watch_num = scrapy.Field(),
-    star_num = scrapy.Field(),
-    fork_num = scrapy.Field(),
+    watch_num = scrapy.Field()
+    star_num = scrapy.Field()
+    fork_num = scrapy.Field()
     lang_list = scrapy.Field()
 
     def item2dic(self):
