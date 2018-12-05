@@ -32,14 +32,14 @@ class repository_detail_spider(scrapy.Spider):
             a = a + 1
             print("[{}] {}".format(a, doc['link']))
             user = doc['link'].split('/')[3]
-            if(len(doc['link'].split('/')) > 4):
+            if (len(doc['link'].split('/')) > 4):
                 project = doc['link'].split('/')[4].split('#')[0]
                 request_link = "https://github.com/{}/{}".format(
                     user, project)
                 logging.info("crawl {}".format(request_link))
                 yield Request(
-                    request_link, 
-                    meta={'link_raw': doc["link"], 'user': user, 'project': project}, 
+                    request_link,
+                    meta={'link_raw': doc["link"], 'user': user, 'project': project},
                     callback=self.parse)
             else:
                 continue
@@ -49,25 +49,47 @@ class repository_detail_spider(scrapy.Spider):
         # print("a: {}".format(a))
 
     def parse(self, response):
+        r = response
         logging.info("parsing {}".format(response.url))
         tags = []
         tags_raw = response.xpath(
             "//*[contains(@class,'list-topics-container')]/a/text()").extract()
-        if(tags_raw):
+        if (tags_raw):
             for tag_raw in tags_raw:
                 tags.append(tag_raw.split(" ")[8].split("\n")[0])
+
+        watch_num = r.xpath('//*[@id="js-repo-pjax-container"]/div[1]/div/ul/li[1]/a[2]/text()').extract()[0].strip()
+        star_num = r.xpath('//*[@id="js-repo-pjax-container"]/div[1]/div/ul/li[2]/a[2]/text()').extract()[0].strip()
+        fork_num = r.xpath('//*[@id="js-repo-pjax-container"]/div[1]/div/ul/li[3]/a[2]/text()').extract()[0].strip()
+        lang_list = r.css('ol.repository-lang-stats-numbers>li>a>span.lang::text').extract()
 
         logging.info(
             "project: {}/{}, tags: {}".format(response.meta["user"], response.meta["project"], tags))
         readme_link = "https://raw.githubusercontent.com/{}/{}/master/README.md".format(
             response.meta["user"], response.meta["project"])
-        yield Request(readme_link, meta={"link_raw": response.meta["link_raw"], "user": response.meta["user"], "project": response.meta["project"], "tags": tags, "page": "README.md"}, callback=self.readme_parse)
+
+        yield Request(
+            readme_link,
+            meta={
+                "link_raw": response.meta["link_raw"],
+                "user": response.meta["user"],
+                "project": response.meta["project"],
+                "tags": tags,
+                "page": "README.md",
+
+                "watch_num": watch_num,
+                "star_num": star_num,
+                "fork_num": fork_num,
+                "lang_list": lang_list
+            },
+            callback=self.readme_parse
+        )
 
     def readme_parse(self, response):
         # pprint.pprint(response.xpath("//pre/text()").extract()[0])
         logging.info("parsing {}".format(response.url))
 
-        if(response.meta["page"] == "README.md"):
+        if (response.meta["page"] == "README.md"):
             try:
                 readme = response.xpath("//pre/text()").extract()[0]
             except:
@@ -85,7 +107,7 @@ class repository_detail_spider(scrapy.Spider):
                     callback=self.readme_parse
                 )
 
-        elif(response.meta["page"] == "readme.md"):
+        elif (response.meta["page"] == "readme.md"):
             try:
                 readme = response.xpath("//pre/text()").extract()[0]
             except:
@@ -93,6 +115,10 @@ class repository_detail_spider(scrapy.Spider):
 
         item = repository_detail_item()
         item["tags"] = response.meta["tags"]
+        item["watch_num"] = response.mate["watch_num"],
+        item["star_num"] = response.mate["star_num"],
+        item["fork_num"] = response.mate["fork_num"],
+        item["lang_list"] = response.mate["lang_list"]
         item["readme"] = readme
         item["project"] = "{}/{}".format(response.meta["user"],
                                          response.meta["project"])
