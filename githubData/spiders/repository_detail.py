@@ -64,7 +64,16 @@ class repository_detail_spider(scrapy.Spider):
         lang_list = r.css('ol.repository-lang-stats-numbers>li>a>span.lang::text').extract()
 
         logging.info(
-            "project: {}/{}, tags: {}".format(response.meta["user"], response.meta["project"], tags))
+            "project: {}/{}, tags: {}, watch: {}, star: {}, fork: {}, lang: {}".format(
+                response.meta["user"],
+                response.meta["project"],
+                tags,
+                watch_num,
+                star_num,
+                fork_num,
+                lang_list
+            )
+        )
         readme_link = "https://raw.githubusercontent.com/{}/{}/master/README.md".format(
             response.meta["user"], response.meta["project"])
 

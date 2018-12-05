@@ -2,7 +2,7 @@
 import scrapy
 from scrapy.loader import ItemLoader
 from githubData.items import repository_list_item
-from scrapy import Request, log
+from scrapy import Request
 from scrapy.selector import Selector
 import pprint
 import pymongo
@@ -16,7 +16,7 @@ class github_repository_list_spider(scrapy.Spider):
     def start_requests(self):
         client = pymongo.MongoClient(
             host="127.0.0.1", port=29197)
-            
+
         client["github"].authenticate("github", "git332", "github")
         db = client["github"]
         coll = db.category
