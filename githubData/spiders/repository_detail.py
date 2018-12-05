@@ -115,10 +115,10 @@ class repository_detail_spider(scrapy.Spider):
 
         item = repository_detail_item()
         item["tags"] = response.meta["tags"]
-        item["watch_num"] = response.mate["watch_num"],
-        item["star_num"] = response.mate["star_num"],
-        item["fork_num"] = response.mate["fork_num"],
-        item["lang_list"] = response.mate["lang_list"]
+        item["watch_num"] = response.meta["watch_num"],
+        item["star_num"] = response.meta["star_num"],
+        item["fork_num"] = response.meta["fork_num"],
+        item["lang_list"] = response.meta["lang_list"]
         item["readme"] = readme
         item["project"] = "{}/{}".format(response.meta["user"],
                                          response.meta["project"])

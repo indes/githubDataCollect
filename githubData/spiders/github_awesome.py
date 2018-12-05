@@ -2,7 +2,7 @@
 import scrapy
 import csv
 from githubData.items import project_category_item
-from scrapy import Request, log
+from scrapy import Request
 from scrapy.selector import Selector
 import pprint
 import json
@@ -20,7 +20,7 @@ class github_awesome_spider(scrapy.Spider):
         categories = response.xpath('//h2/text()').extract()[1:-1]
         for category_1 in categories:
             # 一级分类
-            print("-----------" + category_1+"-----------")
+            print("-----------" + category_1 + "-----------")
 
             categories_2 = response.xpath(
                 "//h2[text()='{}']/following-sibling::ul[1]/li".format(category_1)).extract()
