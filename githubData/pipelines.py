@@ -38,6 +38,6 @@ class github_awesome_pipeline(object):
             print(id)
 
         if isinstance(item, repository_detail_item):
-            coll = self.db.detail
+            coll = self.db.repository_detail
             id = coll.insert_one(item.item2dic()).inserted_id
             logging.info("insert {}".format(id))
